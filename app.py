@@ -257,6 +257,30 @@ LESSONS = {
 }
 
 
+# Short real-world word examples for lessons. These are shown when a topic
+# naturally benefits from a word problem, without forcing word problems onto
+# definition-only topics.
+WORD_EXAMPLES = {
+    "Addition": "A student has 7 pencils and receives 5 more. How many pencils does the student have now?",
+    "Subtraction": "A library has 24 books on a shelf. If 9 are borrowed, how many books remain?",
+    "Multiplication": "There are 6 boxes with 4 notebooks in each box. How many notebooks are there altogether?",
+    "Division": "A teacher has 20 worksheets and gives the same number to 5 students. How many worksheets does each student receive?",
+    "Fractions": "A pizza is cut into 8 equal slices. If you eat 3 slices, what fraction of the pizza did you eat?",
+    "Decimals": "A notebook costs ₱45.50 and a pen costs ₱12.25. What is the total cost?",
+    "Percentages": "A ₱800 school bag is discounted by 15%. How much is the discount?",
+    "Ratios and Proportions": "A recipe uses 2 cups of rice for 5 servings. How many cups are needed for 10 servings?",
+    "Negative Numbers": "The temperature is 3°C and drops by 7°C. What is the new temperature?",
+    "Algebraic Expressions": "A student buys 3 notebooks at x pesos each and a pen costing 20 pesos. Write an expression for the total cost.",
+    "Linear Equations": "A taxi charges a 50-peso starting fee plus 15 pesos per kilometer. If the fare is 170 pesos, how many kilometers were traveled?",
+    "Inequalities": "A student needs at least 80 points to pass. If the student has 63 points, how many more points are needed?",
+    "Polynomials": "A rectangular garden has length x + 3 meters and width x + 2 meters. Write the polynomial for its area.",
+    "Factoring": "A rectangular garden has area x² + 5x + 6 square meters. Find possible expressions for its length and width.",
+    "Quadratic Equations": "The height of a ball is modeled by h(t) = -5t² + 20t. Find when the ball reaches the ground.",
+    "Functions": "A school club charges 50 pesos to join plus 10 pesos for each activity. Write a function for the total cost.",
+    "Probability": "A bag contains 3 red balls and 2 blue balls. If one ball is chosen at random, what is the probability of choosing a red ball?",
+}
+
+
 # ============================================================
 # SESSION STATE
 # ============================================================
@@ -744,6 +768,11 @@ Teaching rules:
 19. If a problem is ambiguous, state the ambiguity and make a reasonable assumption.
 20. When creating practice problems, do not reveal the answer immediately unless requested.
 21. Encourage understanding, not memorization.
+22. Use step-by-step explanations specifically when applying, rearranging, or deriving a formula. Do not force every ordinary explanation into numbered steps.
+23. For formula-based problems, show the formula first, substitute the known values, simplify one step at a time, and clearly state the result.
+24. When a topic can be connected to everyday situations, include a short word problem or real-world example.
+25. Keep word problems realistic, simple, and directly related to the current topic.
+26. Never hide the mathematical reasoning behind a word problem; translate the words into the appropriate expression, equation, or formula.
 
 You can teach anything from basic arithmetic through calculus, linear algebra,
 probability, discrete mathematics, analysis, abstract algebra, topology, and other
@@ -1234,6 +1263,19 @@ with tab_lesson:
     )
 
     st.write(explanation)
+
+    # Show a short word example when the selected topic has a natural
+    # real-world application. Formula topics are handled step by step by the AI.
+    word_example = WORD_EXAMPLES.get(st.session_state.selected_topic)
+    if word_example:
+        st.markdown("### Word Example")
+        st.info(word_example)
+
+    st.markdown("### Formula help")
+    st.markdown(
+        "When a formula is needed, the Professor will use this order: "
+        "formula → substitute values → calculate step by step → final answer."
+    )
 
     st.markdown("### Learning approach")
     st.markdown(
