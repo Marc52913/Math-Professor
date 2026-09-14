@@ -643,6 +643,71 @@ def get_ai_client():
         return None
 
 
+def clean_math_text(text):
+    """Convert common LaTeX-style math into clean, readable text for Streamlit."""
+    if not text:
+        return text
+
+    # Remove display/inline math delimiters.
+    text = text.replace(r"\[", "").replace(r"\]", "")
+    text = text.replace(r"\(", "").replace(r"\)", "")
+    text = text.replace("$$", "")
+    text = text.replace("`$", "`").replace("$`", "`")
+
+    # Remove commands that only affect spacing or styling.
+    text = re.sub(r"\\(?:quad|qquad|;|:|,|!)", " ", text)
+    text = re.sub(r"\\(?:boxed|fbox)\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\text\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\mathrm\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\mathbf\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\operatorname\{([^{}]*)\}", r"\1", text)
+
+    # Convert common math commands to readable Unicode symbols.
+    replacements = {
+        r"\cdot": " × ",
+        r"\times": " × ",
+        r"\div": " ÷ ",
+        r"\pm": " ± ",
+        r"\mp": " ∓ ",
+        r"\leq": " ≤ ",
+        r"\le": " ≤ ",
+        r"\geq": " ≥ ",
+        r"\ge": " ≥ ",
+        r"\neq": " ≠ ",
+        r"\ne": " ≠ ",
+        r"\approx": " ≈ ",
+        r"\infty": "∞",
+        r"\rightarrow": " → ",
+        r"\to": " → ",
+        r"\left": "",
+        r"\right": "",
+        r"\,": " ",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    # Convert simple fractions such as \\frac{a}{b} to a/b.
+    previous = None
+    while previous != text:
+        previous = text
+        text = re.sub(r"\\frac\{([^{}]+)\}\{([^{}]+)\}", r"(\1)/(\2)", text)
+
+    # Remove remaining common formatting commands while keeping their contents.
+    text = re.sub(r"\\(?:displaystyle|dfrac|tfrac|bf|it|rm|cal)\b", "", text)
+
+    # Remove stray LaTeX braces when they are only grouping characters.
+    text = text.replace("{", "").replace("}", "")
+
+    # Turn markdown-style math delimiters into ordinary text.
+    text = text.replace("\\^", "^")
+
+    # Clean spacing introduced by replacements.
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    text = re.sub(r" *\n *", "\n", text)
+
+    return text.strip()
+
+
 def build_system_prompt():
     level = st.session_state.selected_level
     topic = st.session_state.selected_topic
@@ -671,10 +736,14 @@ Teaching rules:
 11. Distinguish exact answers from approximations.
 12. For calculations, show enough work to make the method reproducible.
 13. Keep responses organized with headings, equations, and short steps.
-14. Do not claim that an answer is correct unless the reasoning supports it.
-15. If a problem is ambiguous, state the ambiguity and make a reasonable assumption.
-16. When creating practice problems, do not reveal the answer immediately unless requested.
-17. Encourage understanding, not memorization.
+14. Use plain-text mathematical notation that renders cleanly in a normal webpage. Do NOT use LaTeX commands or delimiters such as square-bracket math delimiters, round-bracket math delimiters, boxed expressions, cdot, quad, text commands, frac commands, or dollar-sign math delimiters.
+15. Write multiplication with ×, division with ÷, and comparison symbols such as ≤, ≥, and ≠ directly.
+16. For fractions, write them as a/b or (a)/(b).
+17. Do not add decorative SVG links, anchor text, or raw URLs to headings.
+18. Do not claim that an answer is correct unless the reasoning supports it.
+19. If a problem is ambiguous, state the ambiguity and make a reasonable assumption.
+20. When creating practice problems, do not reveal the answer immediately unless requested.
+21. Encourage understanding, not memorization.
 
 You can teach anything from basic arithmetic through calculus, linear algebra,
 probability, discrete mathematics, analysis, abstract algebra, topology, and other
@@ -714,7 +783,7 @@ def ask_ai(user_message):
 
         text = getattr(response, "output_text", None)
         if text:
-            return text
+            return clean_math_text(text)
 
         return "I received a response, but it did not contain readable text."
 
