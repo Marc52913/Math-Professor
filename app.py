@@ -1455,7 +1455,7 @@ with tab_about:
 
     st.markdown(
         """
-        ### Hi, I’m Marc Caesar C. Cerado.
+        ### Hi, I’m Marc.
 
         I created **AI Math Professor** as a learning tool that makes mathematics
         easier to explore, practice, and understand.
