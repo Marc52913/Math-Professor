@@ -299,6 +299,7 @@ DEFAULTS = {
     "show_solution": False,
     "chat_messages": [],
     "last_ai_request": "",
+    "theme": "Green",
 }
 
 for key, value in DEFAULTS.items():
@@ -1049,6 +1050,13 @@ with st.sidebar:
     st.title("∑ AI Math Professor")
     st.caption("From arithmetic to advanced mathematics")
 
+    st.session_state.theme = st.selectbox(
+        "Theme",
+        ["Green", "Dark", "Light"],
+        index=["Green", "Dark", "Light"].index(st.session_state.theme),
+        help="Choose the appearance of AI Math Professor.",
+    )
+
     level = st.selectbox(
         "Curriculum level",
         LEVEL_ORDER,
@@ -1097,6 +1105,43 @@ with st.sidebar:
     if st.button("Clear chat", use_container_width=True):
         st.session_state.chat_messages = []
         st.rerun()
+
+
+# ============================================================
+# THEME OVERRIDES
+# ============================================================
+
+THEME_CSS = {
+    "Green": """
+        .stApp { background: #071a12 !important; color: #e8f5ee !important; }
+        [data-testid="stAppViewContainer"] { background: #071a12 !important; }
+        [data-testid="stSidebar"] { background: #05140d !important; }
+        .stat-card, .problem-box { background: linear-gradient(145deg, #103823, #0b281a) !important; border-color: #247447 !important; }
+        .stButton > button { background: #176b3a !important; color: white !important; border-color: #2b9b5c !important; }
+        .stTextInput input, .stTextArea textarea, [data-baseweb="select"] > div { background: #0a2117 !important; color: #effff5 !important; }
+    """,
+    "Dark": """
+        .stApp { background: #111318 !important; color: #f2f4f7 !important; }
+        [data-testid="stAppViewContainer"] { background: #111318 !important; }
+        [data-testid="stSidebar"] { background: #0b0d10 !important; }
+        .stat-card, .problem-box { background: #1a1d23 !important; border-color: #343943 !important; }
+        .stButton > button { background: #252a33 !important; color: #ffffff !important; border-color: #454b56 !important; }
+        .stTextInput input, .stTextArea textarea, [data-baseweb="select"] > div { background: #191c22 !important; color: #f2f4f7 !important; }
+        a { color: #9aa7b8 !important; }
+    """,
+    "Light": """
+        .stApp { background: #f5f7f6 !important; color: #17211b !important; }
+        [data-testid="stAppViewContainer"] { background: #f5f7f6 !important; }
+        [data-testid="stSidebar"] { background: #ffffff !important; border-right: 1px solid #d9e1dc !important; }
+        .stat-card, .problem-box { background: #ffffff !important; border-color: #cfd8d2 !important; box-shadow: 0 5px 18px rgba(0,0,0,.06) !important; }
+        .stButton > button { background: #176b3a !important; color: #ffffff !important; border-color: #176b3a !important; }
+        .stTextInput input, .stTextArea textarea, [data-baseweb="select"] > div { background: #ffffff !important; color: #17211b !important; }
+        .stCaption, [data-testid="stCaptionContainer"] { color: #52635a !important; }
+        a { color: #176b3a !important; }
+    """,
+}
+
+st.markdown(f"<style>{THEME_CSS[st.session_state.theme]}</style>", unsafe_allow_html=True)
 
 
 # ============================================================
@@ -1455,7 +1500,7 @@ with tab_about:
 
     st.markdown(
         """
-        ### Hi, I’m Marc.
+        ### Hi, I’m Marc Caesar C. Cerado.
 
         I created **AI Math Professor** as a learning tool that makes mathematics
         easier to explore, practice, and understand.
