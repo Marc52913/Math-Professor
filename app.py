@@ -803,6 +803,27 @@ def ask_ai(user_message):
 st.markdown(
     """
     <style>
+
+    /* SKSU logo in the top-left corner */
+    .sksu-logo {
+        position: fixed;
+        top: 14px;
+        left: 16px;
+        width: 58px;
+        height: 58px;
+        object-fit: contain;
+        z-index: 999999;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.96);
+        padding: 4px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    }
+
+    /* Keep the logo clear of Streamlit's top controls */
+    [data-testid="stHeader"] {
+        z-index: 1000000;
+    }
+
     /* Main application */
     .stApp {
         background: #071a12;
@@ -1052,6 +1073,11 @@ with st.sidebar:
 # ============================================================
 # HEADER
 # ============================================================
+
+st.markdown(
+    '<img class="sksu-logo" src="https://sksu.edu.ph/wp-content/uploads/2026/03/sksu_seal.png" alt="SKSU Seal">',
+    unsafe_allow_html=True,
+)
 
 st.markdown('<div class="main-title">AI Math Professor</div>', unsafe_allow_html=True)
 st.markdown(
