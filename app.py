@@ -1120,8 +1120,8 @@ with c4:
 # MAIN TABS
 # ============================================================
 
-tab_professor, tab_lesson, tab_practice, tab_tools = st.tabs(
-    ["Professor", "Lesson", "Practice", "Math Tools"]
+tab_professor, tab_lesson, tab_practice, tab_tools, tab_about = st.tabs(
+    ["Professor", "Lesson", "Practice", "Math Tools", "About Me"]
 )
 
 
@@ -1402,6 +1402,52 @@ with tab_tools:
 
             except Exception as exc:
                 st.error(f"Could not process the expression: {exc}")
+
+
+# ============================================================
+# ABOUT ME TAB
+# ============================================================
+
+with tab_about:
+    st.subheader("About Me")
+
+    st.markdown(
+        """
+        ### Hi, I’m Marc Caesar C. Cerado.
+
+        I created **AI Math Professor** as a learning tool that makes mathematics
+        easier to explore, practice, and understand.
+
+        My goal is to build a math learning experience that can guide students
+        from basic arithmetic and algebra to advanced university mathematics.
+        Instead of simply giving answers, the AI Professor is designed to explain
+        concepts, show steps, and help learners improve their problem-solving skills.
+
+        ### What I’m Building
+
+        **AI Math Professor** includes:
+
+        - Interactive math lessons
+        - AI powered tutoring
+        - Practice problems with solutions
+        - Algebra and special products lessons
+        - Mathematical tools powered by SymPy
+        - A structured curriculum from foundations to advanced mathematics
+
+        ### My Goal
+
+        I want to make mathematics more approachable while encouraging students
+        to understand **why** a solution works, not just memorize the answer.
+
+        ### Why This Project Matters
+
+        Mathematics becomes easier when students can ask questions, make mistakes,
+        receive explanations, and try again. This project is my attempt to put
+        those learning tools into one accessible website.
+        """
+    )
+
+    st.info("Keep learning. Keep questioning. Keep solving.")
 
 
 # ============================================================
